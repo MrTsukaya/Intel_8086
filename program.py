@@ -13,7 +13,7 @@ def placeItems(item, X_cord, Y_cord, bgC):
     for x in range(len(item)):
         item[x].config(width=8, bg=bgC, font="bold")
         item[x].place(x = X_cord, y = Y_cord)
-        Y_cord = Y_cord + 50
+        Y_cord = Y_cord + 40
 
 def randomRegisterValue():
     for x in range(len(registersValue)):
@@ -24,7 +24,7 @@ def randomRegisterValue():
 
 def reset():
     for x in range(len(registersValue)):
-        registersValue[x].config(text="")
+        registersValue[x].config(text="0000")
     actionHistory.clear()
     History.delete(1.0,tk.END)
 
@@ -115,19 +115,19 @@ registers.append(temp)
 temp = tk.Label(text="DX")
 registers.append(temp)
 
-placeItems(registers,10,10,"#aaa")
+placeItems(registers,20,20,"#aaa")
 
 registersValue = []
-temp = tk.Label()
+temp = tk.Label(text="0000")
 registersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 registersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 registersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 registersValue.append(temp)
 
-placeItems(registersValue,110,10,"#ccc")
+placeItems(registersValue,130,20,"#ccc")
 
 pointers = []
 temp = tk.Label(text="SI")
@@ -141,21 +141,21 @@ pointers.append(temp)
 temp = tk.Label(text="DISP")
 pointers.append(temp)
 
-placeItems(pointers,10,250,"#aaa")
+placeItems(pointers,20,267,"#aaa")
 
 pointersValue = []
-temp = tk.Label()
+temp = tk.Label(text="0000")
 pointersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 pointersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 pointersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 pointersValue.append(temp)
-temp = tk.Label()
+temp = tk.Label(text="0000")
 pointersValue.append(temp)
 
-placeItems(pointersValue,110,250,"#ccc")
+placeItems(pointersValue,130,267,"#ccc")
 #######################################
 #           Zmienne wyboru            #
 #######################################
@@ -164,6 +164,7 @@ var1 = tk.IntVar()
 var2 = tk.IntVar()
 var3 = tk.IntVar()
 var4 = tk.IntVar()
+var5 = tk.IntVar()
 
 checkbuttonsA = [
     tk.Checkbutton(text="AX",variable=var1,onvalue=1),
@@ -186,11 +187,18 @@ radioButtonsB = [
     tk.Radiobutton(text="Bazowy",variable=var4,value=2),
     tk.Radiobutton(text="Indeksowo-bazowy",variable=var4,value=3)
 ]
+radioButtonsC = [
+    tk.Radiobutton(text="SI i BX",variable=var5,value=1),
+    tk.Radiobutton(text="DI i BX",variable=var5,value=2),
+    tk.Radiobutton(text="SI i BP",variable=var5,value=3),
+    tk.Radiobutton(text="DI i BP",variable=var5,value=4)
+]
 
 placeItems(checkbuttonsA,485,300,"#bdc3c7")
 placeItems(checkbuttonsB,650,300,"#bdc3c7")
 placeItems(radioButtons,250,10, "#ecf0f1")
-placeItems(radioButtonsB,250,180, "#ecf0f1")
+placeItems(radioButtonsB,250,120, "#ecf0f1")
+placeItems(radioButtonsC,250,300, "#ecf0f1")
 
 radioButtons[0].config(width=20,font=("Arial",12))
 radioButtons[1].config(width=20,font=("Arial",12))
@@ -199,15 +207,20 @@ radioButtonsB[0].config(width=20,font=("Arial",12))
 radioButtonsB[1].config(width=20,font=("Arial",12))
 radioButtonsB[2].config(width=20,font=("Arial",12))
 
+radioButtonsC[0].config(width=20,font=("Arial",12))
+radioButtonsC[1].config(width=20,font=("Arial",12))
+radioButtonsC[2].config(width=20,font=("Arial",12))
+radioButtonsC[3].config(width=20,font=("Arial",12))
+
 ########################################
 #               Przyciski              #
 ########################################
 
 buttonRandom = tk.Button(root, text="Random", command=randomRegisterValue)
-buttonRandom.place(x=10, y=565)
+buttonRandom.place(x=20, y=565)
 
 buttonReset = tk.Button(root, text="Reset", command=reset)
-buttonReset.place(x=80, y=565)
+buttonReset.place(x=90, y=565)
 
 buttonMove = tk.Button(root, text="MOVE", command=lambda:moveRegisters(var1,var2))
 buttonMove.place(x=485, y=565)
