@@ -4,7 +4,7 @@ import random as rand
 root = tk.Tk()
 root.geometry("800x600")
 root.title("Intel 8086 Simulator - 13390")
-
+root.configure(background="#ecf0f1")
 ###########################################
 #                 Funkcje                 #
 ###########################################
@@ -65,16 +65,38 @@ def updateHistory():
     for x in range(len(actionHistory)):
         History.insert(tk.END,actionHistory[x])
 
-def push():
-    print(1)
+def push(what):
+    what = what.get()
+    temp = registersValue[what-1].cget("text")
+    stackmemory.append(temp)
+    global stackpointer
+    stackpointer = int(stackpointer,16) + 2
+    stackpointer = hex(stackpointer).lstrip("0x")
+    pointersValue[3].config(text=stackpointer)
+    a = registers[what-1].cget("text")
+    actionHistory.append(f"Pushed {a} to the stack\n")
+    registersValue[what-1].config(text="0000")
+    updateHistory()
 
-def pop():
-    print(2)
+def pop(where):
+    where = where.get()
+    a = registers[where-1].cget("text")
+    b = stackmemory[-1]
+    del stackmemory[-1]
+    global stackpointer
+    stackpointer = int(stackpointer,16) - 2
+    stackpointer = hex(stackpointer).lstrip("0x")
+    pointersValue[3].config(text=stackpointer)
+    actionHistory.append(f"Popped {b} from the stack to {a}\n")
+    registersValue[where-1].config(text=b)
+    updateHistory()
 ###########################################
 #          Struktura "na sztywno"         #
 ###########################################
 
 actionHistory = []
+stackmemory = []
+stackpointer = "0"
 
 registersTable = [
     "0","1","2","3",
@@ -140,6 +162,8 @@ placeItems(pointersValue,110,250,"#ccc")
 
 var1 = tk.IntVar()
 var2 = tk.IntVar()
+var3 = tk.IntVar()
+var4 = tk.IntVar()
 
 checkbuttonsA = [
     tk.Checkbutton(text="AX",variable=var1,onvalue=1),
@@ -153,8 +177,27 @@ checkbuttonsB = [
     tk.Checkbutton(text="CX",variable=var2,onvalue=3),
     tk.Checkbutton(text="DX",variable=var2,onvalue=4),
 ]
-placeItems(checkbuttonsA,485,300,"#aaa")
-placeItems(checkbuttonsB,650,300,"#aaa")
+radioButtons = [
+    tk.Radiobutton(text="Z rejestru do pamięci",variable=var3,value=1),
+    tk.Radiobutton(text="Z pamięci do rejestru",variable=var3,value=2)
+]
+radioButtonsB = [
+    tk.Radiobutton(text="Indeksowy",variable=var4,value=1),
+    tk.Radiobutton(text="Bazowy",variable=var4,value=2),
+    tk.Radiobutton(text="Indeksowo-bazowy",variable=var4,value=3)
+]
+
+placeItems(checkbuttonsA,485,300,"#bdc3c7")
+placeItems(checkbuttonsB,650,300,"#bdc3c7")
+placeItems(radioButtons,250,10, "#ecf0f1")
+placeItems(radioButtonsB,250,180, "#ecf0f1")
+
+radioButtons[0].config(width=20,font=("Arial",12))
+radioButtons[1].config(width=20,font=("Arial",12))
+
+radioButtonsB[0].config(width=20,font=("Arial",12))
+radioButtonsB[1].config(width=20,font=("Arial",12))
+radioButtonsB[2].config(width=20,font=("Arial",12))
 
 ########################################
 #               Przyciski              #
@@ -172,10 +215,10 @@ buttonMove.place(x=485, y=565)
 buttonExchange = tk.Button(root, text="XCHG", command=lambda:exchangeRegisters(var1,var2))
 buttonExchange.place(x=555, y=565)
 
-buttonPush = tk.Button(root, text="Push", command=push)
+buttonPush = tk.Button(root, text="Push", command=lambda:push(var1))
 buttonPush.place(x=635, y=565)
 
-buttonPop = tk.Button(root, text="Pop", command=pop)
+buttonPop = tk.Button(root, text="Pop", command=lambda:pop(var1))
 buttonPop.place(x=705, y=565)
 
 buttons = [buttonRandom,buttonReset,buttonMove,buttonExchange,buttonPush,buttonPop]
